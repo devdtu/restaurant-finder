@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import GoogleMapComponent from "./GoogleMapComponent";
 
 class MapContainer extends Component {
+  markerClicked = marker => {
+    // console.log(marker);
+    this.props.handlemarkerClick(marker);
+  };
+
   render() {
     const test = {
       doctors: [
@@ -22,6 +27,7 @@ class MapContainer extends Component {
         <div className="row">
           <div className="col-md-12">
             <GoogleMapComponent
+              handlemarkerClick={this.markerClicked}
               doctors={test.doctors}
               googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyAWpENcpeYKhtVHiJArdrtiumOW42WA6Ac&v=3.exp&libraries=geometry,drawing,places`}
               loadingElement={<div style={{ height: `100%` }} />}

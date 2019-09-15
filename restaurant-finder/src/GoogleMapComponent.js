@@ -4,8 +4,13 @@ import RestaurantMarker from "./RestaurantMarker.js";
 
 const GoogleMapComponent = withScriptjs(
   withGoogleMap(props => {
+    const markerClicked = marker => {
+      // console.log(marker);
+      props.handlemarkerClick(marker);
+    };
     const markers = props.doctors.map(doctor => (
       <RestaurantMarker
+        handleMarkerClick={markerClicked}
         key={doctor.uid}
         doctor={doctor}
         location={{
