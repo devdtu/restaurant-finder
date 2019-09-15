@@ -11,10 +11,10 @@ class App extends Component {
         <div className="row">
           <div className="col-md-12">
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-4">
                 <ListContainer></ListContainer>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-8">
                 <MapContainer></MapContainer>
               </div>
             </div>
