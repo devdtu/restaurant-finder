@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import GoogleMapComponent from "./MapComponent";
 import GoogleMapComponent from "./GoogleMapComponent";
 
 class MapContainer extends Component {
