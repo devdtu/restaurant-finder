@@ -60,6 +60,7 @@ class App extends Component {
               </div>
               <div className="col-md-8 px-0">
                 <MapContainer
+                  restaurants={this.state.restaurants}
                   handlemarkerClick={this.restaurantSelected}
                 ></MapContainer>
               </div>

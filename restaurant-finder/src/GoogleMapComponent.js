@@ -5,22 +5,33 @@ import RestaurantMarker from "./RestaurantMarker.js";
 const GoogleMapComponent = withScriptjs(
   withGoogleMap(props => {
     const markerClicked = marker => {
-      // console.log(marker);
       props.handlemarkerClick(marker);
     };
-    const markers = props.doctors.map(doctor => (
+    console.log(props);
+    const markers = props.restaurants.businesses.map(restaurant => (
       <RestaurantMarker
         handleMarkerClick={markerClicked}
-        key={doctor.uid}
-        doctor={doctor}
+        key={restaurant.id}
+        restaurant={restaurant}
         location={{
-          lat: parseFloat(doctor.lat),
-          lng: parseFloat(doctor.lng)
+          lat: parseFloat(restaurant.coordinates.latitude),
+          lng: parseFloat(restaurant.coordinates.longitude)
         }}
       />
     ));
+
+    const centerCoordinates = {
+      lat: parseFloat(props.restaurants.region.center.latitude),
+      lng: parseFloat(props.restaurants.region.center.longitude)
+    };
+
+    console.log(markers);
+
     return (
-      <GoogleMap defaultZoom={14} center={{ lat: 28.549999, lng: 77.199997 }}>
+      <GoogleMap
+        defaultZoom={14}
+        center={{ lat: centerCoordinates.lat, lng: centerCoordinates.lng }}
+      >
         {markers}
       </GoogleMap>
     );
