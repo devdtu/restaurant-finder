@@ -6,23 +6,8 @@ class ListComponent extends Component {
   constructor(props) {
     super(props);
     this.restaurant = this.props.restaurant;
-
-    console.log(this.props);
   }
-  testFunction = () => {
-    console.log(this.restaurant);
-    // console.log(this.props.restaurants.businesses);
-  };
 
-  componentDidMount() {
-    // this.setState({ restaurant: this.props.restaurant }, () => {
-    //   console.log(this.props);
-    //   console.log(this.props.restaurant);
-    //   console.log(this.state);
-    // });
-    // console.log(this.state);
-    // this.restaurant = this.props;
-  }
   render() {
     return this.restaurant ? (
       <div className="row restaurent-list-component">

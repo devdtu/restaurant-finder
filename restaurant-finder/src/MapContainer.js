@@ -3,7 +3,6 @@ import GoogleMapComponent from "./GoogleMapComponent";
 
 class MapContainer extends Component {
   markerClicked = marker => {
-    // console.log(marker);
     this.props.handlemarkerClick(marker);
   };
 
@@ -12,20 +11,6 @@ class MapContainer extends Component {
   }
 
   render() {
-    const test = {
-      doctors: [
-        {
-          uid: "12323443",
-          lat: 28.549507,
-          lng: 77.203613
-        },
-        {
-          uid: "23237892",
-          lat: 28.549999,
-          lng: 77.199997
-        }
-      ]
-    };
     return this.props.restaurants ? (
       <div className="container-fluid">
         <div className="row">

@@ -7,7 +7,7 @@ const GoogleMapComponent = withScriptjs(
     const markerClicked = marker => {
       props.handlemarkerClick(marker);
     };
-    console.log(props);
+
     const markers = props.restaurants.businesses.map(restaurant => (
       <RestaurantMarker
         handleMarkerClick={markerClicked}
@@ -24,8 +24,6 @@ const GoogleMapComponent = withScriptjs(
       lat: parseFloat(props.restaurants.region.center.latitude),
       lng: parseFloat(props.restaurants.region.center.longitude)
     };
-
-    console.log(markers);
 
     return (
       <GoogleMap

@@ -4,13 +4,7 @@ import ListComponent from "./ListComponent";
 class ListContainer extends Component {
   constructor(props) {
     super(props);
-
-    console.log(this.props);
   }
-
-  // testFunction = () => {
-  //   console.log(this.props);
-  // };
   render() {
     return (
       <div className="container-fluid">
@@ -25,12 +19,9 @@ class ListContainer extends Component {
                 })
               ) : null
             ) : (
-              // <ListComponent restaurants={this.props.restaurants} />
               <RestaurantDetail />
             )}
           </div>
-
-          {/* <div onClick={this.testFunction}>test</div> */}
         </div>
       </div>
     );

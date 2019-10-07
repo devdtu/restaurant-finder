@@ -3,11 +3,6 @@ import ListContainer from "./ListContainer";
 import MapContainer from "./MapContainer";
 import { GetRestaurants } from "./service";
 
-const params = {
-  term: "restaurants",
-  location: "Peachtree Corners, GA, US",
-  offset: 19
-};
 class App extends Component {
   state = {
     selectedRestaurant: null,
@@ -15,12 +10,9 @@ class App extends Component {
   };
 
   restaurantSelected = restaurant => {
-    console.log(restaurant);
-    console.log(this.state.restaurants);
     this.setState(
       {
         selectedRestaurant: restaurant.restaurant
-        // restaurants: this.state.restaurants ? [...this.state.restaurants] : null
       },
       () => {
         console.log(this.state);
