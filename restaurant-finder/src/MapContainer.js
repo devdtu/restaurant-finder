@@ -25,7 +25,7 @@ class MapContainer extends Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-12 px-0">
             <GoogleMapComponent
               handlemarkerClick={this.markerClicked}
               doctors={test.doctors}

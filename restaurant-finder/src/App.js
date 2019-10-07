@@ -52,13 +52,13 @@ class App extends Component {
         <div className="row">
           <div className="col-md-12">
             <div className="row">
-              <div className="col-md-4">
+              <div className="col-md-4 px-0">
                 <ListContainer
                   restaurants={this.state.restaurants}
                   selectedRestaurant={this.state.selectedRestaurant}
                 ></ListContainer>
               </div>
-              <div className="col-md-8">
+              <div className="col-md-8 px-0">
                 <MapContainer
                   handlemarkerClick={this.restaurantSelected}
                 ></MapContainer>

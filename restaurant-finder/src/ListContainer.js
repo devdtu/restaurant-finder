@@ -15,7 +15,7 @@ class ListContainer extends Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-12 pr-0 list-container-restaurant">
             {!this.props.selectedRestaurant ? (
               this.props.restaurants ? (
                 this.props.restaurants.businesses.map((val, index) => {
