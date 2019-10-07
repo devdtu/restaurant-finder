@@ -15,10 +15,12 @@ class App extends Component {
   };
 
   restaurantSelected = restaurant => {
+    console.log(restaurant);
+    console.log(this.state.restaurants);
     this.setState(
       {
-        selectedRestaurant: restaurant,
-        restaurant: this.state.restaurants ? [...this.state.restaurants] : null
+        selectedRestaurant: restaurant.restaurant
+        // restaurants: this.state.restaurants ? [...this.state.restaurants] : null
       },
       () => {
         console.log(this.state);
