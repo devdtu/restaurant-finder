@@ -16,6 +16,7 @@ class MapContainer extends Component {
         <div className="row">
           <div className="col-md-12 px-0">
             <GoogleMapComponent
+              selectedRestaurant={this.props.selectedRestaurant}
               handlemarkerClick={this.markerClicked}
               restaurants={this.props.restaurants}
               googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyAWpENcpeYKhtVHiJArdrtiumOW42WA6Ac&v=3.exp&libraries=geometry,drawing,places`}

@@ -8,22 +8,39 @@ const GoogleMapComponent = withScriptjs(
       props.handlemarkerClick(marker);
     };
 
-    const markers = props.restaurants.businesses.map(restaurant => (
-      <RestaurantMarker
-        handleMarkerClick={markerClicked}
-        key={restaurant.id}
-        restaurant={restaurant}
-        location={{
-          lat: parseFloat(restaurant.coordinates.latitude),
-          lng: parseFloat(restaurant.coordinates.longitude)
-        }}
-      />
-    ));
+    const markers = !props.selectedRestaurant
+      ? props.restaurants.businesses.map(restaurant => (
+          <RestaurantMarker
+            handleMarkerClick={markerClicked}
+            key={restaurant.id}
+            restaurant={restaurant}
+            location={{
+              lat: parseFloat(restaurant.coordinates.latitude),
+              lng: parseFloat(restaurant.coordinates.longitude)
+            }}
+          />
+        ))
+      : [
+          <RestaurantMarker
+            handleMarkerClick={markerClicked}
+            key={props.selectedRestaurant.id}
+            restaurant={props.selectedRestaurant}
+            location={{
+              lat: parseFloat(props.selectedRestaurant.coordinates.latitude),
+              lng: parseFloat(props.selectedRestaurant.coordinates.longitude)
+            }}
+          />
+        ];
 
-    const centerCoordinates = {
-      lat: parseFloat(props.restaurants.region.center.latitude),
-      lng: parseFloat(props.restaurants.region.center.longitude)
-    };
+    const centerCoordinates = !props.selectedRestaurant
+      ? {
+          lat: parseFloat(props.restaurants.region.center.latitude),
+          lng: parseFloat(props.restaurants.region.center.longitude)
+        }
+      : {
+          lat: parseFloat(props.selectedRestaurant.coordinates.latitude),
+          lng: parseFloat(props.selectedRestaurant.coordinates.longitude)
+        };
 
     return (
       <GoogleMap
