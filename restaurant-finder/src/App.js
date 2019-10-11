@@ -22,7 +22,7 @@ class App extends Component {
         selectedRestaurant: restaurant
       },
       () => {
-        console.log(this.state);
+        // console.log(this.state);
       }
     );
   };
@@ -31,7 +31,7 @@ class App extends Component {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("load", () => {
       this.setState({ restaurants: JSON.parse(xhr.responseText) }, () => {
-        console.log(this.state);
+        // console.log(this.state);
       });
     });
     xhr.open(
@@ -48,7 +48,6 @@ class App extends Component {
   }
 
   deSelectRestaurant() {
-    console.log("here");
     this.setState({ selectedRestaurant: null });
   }
 

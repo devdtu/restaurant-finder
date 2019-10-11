@@ -13,7 +13,6 @@ class ListContainer extends Component {
   }
 
   goBack() {
-    console.log(this.props);
     this.props.deSelectRestaurant();
   }
 
