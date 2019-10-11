@@ -3,14 +3,23 @@ import StarRatings from "../node_modules/react-star-ratings";
 // https://www.npmjs.com/package/react-star-ratings
 class ListComponent extends Component {
   restaurant;
+  selfReference;
   constructor(props) {
     super(props);
+    this.selfReference = this;
     this.restaurant = this.props.restaurant;
+  }
+
+  selectRestaurant() {
+    this.props.restaurantSelected(this.restaurant);
   }
 
   render() {
     return this.restaurant ? (
-      <div className="row restaurent-list-component">
+      <div
+        onClick={this.selectRestaurant.bind(this.selfReference)}
+        className="row restaurent-list-component"
+      >
         <div className="col-md-12 py-2">
           <div className="row">
             <div className="col-md-8">

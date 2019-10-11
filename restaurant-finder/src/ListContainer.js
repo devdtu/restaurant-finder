@@ -2,9 +2,21 @@ import React, { Component } from "react";
 import RestaurantDetail from "./RestaurantDetail";
 import ListComponent from "./ListComponent";
 class ListContainer extends Component {
+  selfReference;
   constructor(props) {
     super(props);
+    this.selfReference = this;
   }
+
+  selectRestaruant(restaurant) {
+    this.props.selectRestaurant(restaurant);
+  }
+
+  goBack() {
+    console.log(this.props);
+    this.props.deSelectRestaurant();
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -14,12 +26,21 @@ class ListContainer extends Component {
               this.props.restaurants ? (
                 this.props.restaurants.businesses.map((val, index) => {
                   return (
-                    <ListComponent restaurant={val} key={index}></ListComponent>
+                    <ListComponent
+                      restaurantSelected={this.selectRestaruant.bind(
+                        this.selfReference
+                      )}
+                      restaurant={val}
+                      key={index}
+                    ></ListComponent>
                   );
                 })
               ) : null
             ) : (
-              <RestaurantDetail />
+              <RestaurantDetail
+                restaurant={this.props.selectedRestaurant}
+                goback={this.goBack.bind(this.selfReference)}
+              />
             )}
           </div>
         </div>

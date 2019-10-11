@@ -3,7 +3,7 @@ import GoogleMapComponent from "./GoogleMapComponent";
 
 class MapContainer extends Component {
   markerClicked = marker => {
-    this.props.handlemarkerClick(marker);
+    this.props.handlemarkerClick(marker.restaurant);
   };
 
   constructor(props) {

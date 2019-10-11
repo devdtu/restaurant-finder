@@ -10063,3 +10063,14 @@ a.text-dark:hover, a.text-dark:focus {
 .restaurent-list-component:hover {
   background: #d3d5d7;
 }
+
+.back-image {
+  height: 100%;
+  cursor: pointer;
+}
+
+.restaurant-image {
+  width: 100%;
+  object-fit: cover;
+  height: 350px;
+}

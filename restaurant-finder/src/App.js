@@ -9,10 +9,17 @@ class App extends Component {
     restaurants: null
   };
 
+  selfReference;
+
+  constructor(props) {
+    super(props);
+    this.selfReference = this;
+  }
+
   restaurantSelected = restaurant => {
     this.setState(
       {
-        selectedRestaurant: restaurant.restaurant
+        selectedRestaurant: restaurant
       },
       () => {
         console.log(this.state);
@@ -40,6 +47,11 @@ class App extends Component {
     xhr.send();
   }
 
+  deSelectRestaurant() {
+    console.log("here");
+    this.setState({ selectedRestaurant: null });
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -50,6 +62,10 @@ class App extends Component {
                 <ListContainer
                   restaurants={this.state.restaurants}
                   selectedRestaurant={this.state.selectedRestaurant}
+                  selectRestaurant={this.restaurantSelected}
+                  deSelectRestaurant={this.deSelectRestaurant.bind(
+                    this.selfReference
+                  )}
                 ></ListContainer>
               </div>
               <div className="col-md-8 px-0">
