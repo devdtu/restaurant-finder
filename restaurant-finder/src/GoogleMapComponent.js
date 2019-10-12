@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  StandaloneSearchBox
+} from "react-google-maps";
 import RestaurantMarker from "./RestaurantMarker.js";
 
 const GoogleMapComponent = withScriptjs(
