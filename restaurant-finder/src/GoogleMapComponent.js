@@ -7,10 +7,24 @@ import {
 } from "react-google-maps";
 import RestaurantMarker from "./RestaurantMarker.js";
 
+import SearchBox from "react-google-maps/lib/components/places/SearchBox";
+
 const GoogleMapComponent = withScriptjs(
   withGoogleMap(props => {
     const markerClicked = marker => {
       props.handlemarkerClick(marker);
+    };
+
+    let searchBox;
+
+    function componentWillMount() {
+      console.log("componentWillMount() called");
+    }
+
+    const onPlacesChange = () => {
+      console.log("onPlacesChange called");
+      const places = this.searchBox.getPlaces();
+      this.setState({ places });
     };
 
     const markers = !props.selectedRestaurant
@@ -52,6 +66,28 @@ const GoogleMapComponent = withScriptjs(
         defaultZoom={14}
         center={{ lat: centerCoordinates.lat, lng: centerCoordinates.lng }}
       >
+        <SearchBox
+          ref={searchBox => (searchBox = searchBox)}
+          onPlacesChanged={onPlacesChange}
+        >
+          <input
+            type="text"
+            placeholder="Customized your placeholder"
+            style={{
+              boxSizing: `border-box`,
+              border: `1px solid transparent`,
+              width: `240px`,
+              height: `32px`,
+              marginTop: `27px`,
+              padding: `0 12px`,
+              borderRadius: `3px`,
+              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+              fontSize: `14px`,
+              outline: `none`,
+              textOverflow: `ellipses`
+            }}
+          />
+        </SearchBox>
         {markers}
       </GoogleMap>
     );

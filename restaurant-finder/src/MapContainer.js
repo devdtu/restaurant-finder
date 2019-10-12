@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import GoogleMapComponent from "./GoogleMapComponent";
-import PlacesWithStandaloneSearchBox from "./googleSearchBox";
 import AppHoc from "./googleSearchBoxNew";
 
 class MapContainer extends Component {
@@ -19,13 +18,6 @@ class MapContainer extends Component {
   render() {
     return this.props.restaurants ? (
       <div className="container-fluid">
-        {/* <div className="row test">
-          <div className="col-md-12">
-            <PlacesWithStandaloneSearchBox
-              onSearchBoxMounted={this.onSearchBoxMounted}
-            ></PlacesWithStandaloneSearchBox>
-          </div>
-        </div> */}
         <div className="test">
           <AppHoc
             googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDAQOhuvUriLPgDzVblnSSH7BUj-s2EMSw&v=3.exp&libraries=geometry,drawing,places`}
@@ -46,6 +38,7 @@ class MapContainer extends Component {
               }
               mapElement={<div style={{ height: `100%` }} />}
             ></GoogleMapComponent>
+            MapWithASearchBox
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 import StandaloneSearchBox from "react-google-maps/lib/components/places/StandaloneSearchBox";
+import SearchBox from "react-google-maps/lib/components/places/SearchBox";
 import { withScriptjs } from "react-google-maps";
 
 class App extends Component {
@@ -15,6 +16,7 @@ class App extends Component {
   onPlacesChange = () => {
     console.log("onPlacesChange called");
     const places = this.searchBox.getPlaces();
+    console.log(places);
     this.setState({ places });
   };
 
@@ -22,8 +24,16 @@ class App extends Component {
     return (
       <div>
         <p>Start editing to see some magic happen :)</p>
+        {/* <StandaloneSearchBox
+          //   onPlacesChanged={this.onPlacesChanged}
+          onPlacesChanged={data => {
+            console.log(data);
+            console.log(this);
+          }}
+          ref={searchBox => (this.searchBox = searchBox)}
+        > */}
         <StandaloneSearchBox
-          onPlacesChanged={this.onPlacesChanged}
+          onPlacesChanged={this.onPlacesChange}
           ref={searchBox => (this.searchBox = searchBox)}
         >
           <input
@@ -43,6 +53,28 @@ class App extends Component {
             }}
           />
         </StandaloneSearchBox>
+        {/* <SearchBox
+          ref={searchBox => (this.searchBox = searchBox)}
+          onPlacesChanged={this.onPlacesChanged}
+        >
+          <input
+            type="text"
+            placeholder="Customized your placeholder"
+            style={{
+              boxSizing: `border-box`,
+              border: `1px solid transparent`,
+              width: `240px`,
+              height: `32px`,
+              marginTop: `27px`,
+              padding: `0 12px`,
+              borderRadius: `3px`,
+              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+              fontSize: `14px`,
+              outline: `none`,
+              textOverflow: `ellipses`
+            }}
+          />
+        </SearchBox> */}
         <ol>
           {this.state.places.map(
             ({ place_id, formatted_address, geometry: { location } }) => (
@@ -61,12 +93,3 @@ class App extends Component {
 const AppHoc = withScriptjs(App);
 
 export default AppHoc;
-
-// render(
-//   <AppHoc
-//     googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
-//     loadingElement={<div style={{ height: `100%` }} />}
-//     containerElement={<div style={{ height: `400px` }} />}
-//   />,
-//   document.getElementById("root")
-// );
