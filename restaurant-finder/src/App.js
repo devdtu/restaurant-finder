@@ -49,9 +49,12 @@ class App extends Component {
   getRestaurants(address) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("load", () => {
-      this.setState({ restaurants: JSON.parse(xhr.responseText) }, () => {
-        console.log(this.state);
-      });
+      this.setState(
+        { restaurants: JSON.parse(xhr.responseText), selectedRestaurant: null },
+        () => {
+          console.log(this.state);
+        }
+      );
     });
     var url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=restaurants&location=${address}`;
     xhr.open("GET", url);
