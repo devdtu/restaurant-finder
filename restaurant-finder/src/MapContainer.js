@@ -1,29 +1,34 @@
 import React, { Component } from "react";
 import GoogleMapComponent from "./GoogleMapComponent";
-import AppHoc from "./googleSearchBoxNew";
+import SearchBoxComponent from "./googleSearchBoxNew";
 
 class MapContainer extends Component {
   markerClicked = marker => {
     this.props.handlemarkerClick(marker.restaurant);
   };
-
+  selfReference;
   constructor(props) {
     super(props);
+    this.selfReference = this;
   }
 
-  onSearchBoxMounted() {
+  onSearchTextChange(place) {
+    console.log(this);
+    this.props.onSearchTextChanged(place);
     console.log("hererjeh");
+    console.log(place);
   }
 
   render() {
     return this.props.restaurants ? (
       <div className="container-fluid">
         <div className="test">
-          <AppHoc
+          <SearchBoxComponent
+            searchTextChange={this.onSearchTextChange.bind(this.selfReference)}
             googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDAQOhuvUriLPgDzVblnSSH7BUj-s2EMSw&v=3.exp&libraries=geometry,drawing,places`}
             loadingElement={<div style={{ height: `100%` }} />}
             containerElement={<div style={{ height: `400px` }} />}
-          ></AppHoc>
+          ></SearchBoxComponent>
         </div>
         <div className="row">
           <div className="col-md-12 px-0">
@@ -38,7 +43,6 @@ class MapContainer extends Component {
               }
               mapElement={<div style={{ height: `100%` }} />}
             ></GoogleMapComponent>
-            MapWithASearchBox
           </div>
         </div>
       </div>

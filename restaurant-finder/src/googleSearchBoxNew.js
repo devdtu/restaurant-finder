@@ -7,34 +7,29 @@ import { withScriptjs } from "react-google-maps";
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      name: "React",
-      places: []
-    };
   }
 
   onPlacesChange = () => {
-    console.log("onPlacesChange called");
     const places = this.searchBox.getPlaces();
     console.log(places);
-    this.setState({ places });
+
+    this.props.searchTextChange(places[0]);
   };
 
   render() {
     return (
       <div>
-        <p>Start editing to see some magic happen :)</p>
         <StandaloneSearchBox
           onPlacesChanged={this.onPlacesChange}
           ref={searchBox => (this.searchBox = searchBox)}
         >
           <input
             type="text"
-            placeholder="Customized your placeholder"
+            placeholder="Select Region"
             style={{
               boxSizing: `border-box`,
               border: `1px solid transparent`,
-              width: `240px`,
+              width: `350px`,
               height: `32px`,
               padding: `0 12px`,
               borderRadius: `3px`,
@@ -45,21 +40,11 @@ class App extends Component {
             }}
           />
         </StandaloneSearchBox>
-        <ol>
-          {this.state.places.map(
-            ({ place_id, formatted_address, geometry: { location } }) => (
-              <li key={place_id}>
-                {formatted_address}
-                {" at "}({location.lat()}, {location.lng()})
-              </li>
-            )
-          )}
-        </ol>
       </div>
     );
   }
 }
 
-const AppHoc = withScriptjs(App);
+const SearchBoxComponent = withScriptjs(App);
 
-export default AppHoc;
+export default SearchBoxComponent;
