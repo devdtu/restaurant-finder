@@ -26,7 +26,16 @@ class App extends Component {
     );
   };
 
+  resize() {
+    this.setState({ screenWidth: window.innerWidth }, () => {
+      console.log(this.state);
+    });
+  }
+
   componentDidMount() {
+    window.addEventListener("resize", this.resize.bind(this));
+    this.resize();
+
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("load", () => {
       this.setState({ restaurants: JSON.parse(xhr.responseText) }, () => {
@@ -84,7 +93,7 @@ class App extends Component {
         <div className="row">
           <div className="col-md-12">
             <div className="row">
-              <div className="col-md-4 px-0">
+              <div className="col-md-5 px-0">
                 <ListContainer
                   restaurants={this.state.restaurants}
                   selectedRestaurant={this.state.selectedRestaurant}
@@ -94,7 +103,7 @@ class App extends Component {
                   )}
                 ></ListContainer>
               </div>
-              <div className="col-md-8 px-0">
+              <div className="col-md-7 px-0 hidden-sm-down	">
                 <MapContainer
                   onSearchTextChanged={this.searchTextChanged.bind(
                     this.selfReference

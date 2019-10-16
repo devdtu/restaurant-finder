@@ -10082,3 +10082,10 @@ a.text-dark:hover, a.text-dark:focus {
   right: 100px;
   z-index: 1000;
 }
+
+
+@media only screen and (max-width: 900px) {
+  .restaurant-list-image {
+    padding-right: 15px;
+  }
+}

@@ -20,7 +20,7 @@ class ListComponent extends Component {
       >
         <div className="col-md-12 py-2">
           <div className="row">
-            <div className="col-md-8">
+            <div className="col-md-8 col-7">
               <div className="font-weight-bold">
                 {this.props.restaurant.name}
               </div>
@@ -35,7 +35,7 @@ class ListComponent extends Component {
               <div>{this.props.restaurant.location.address1}</div>
               <div>{this.props.restaurant.is_closed ? "Closed" : "Open"}</div>
             </div>
-            <div className="col-md-4">
+            <div className="col-5 col-md-4">
               <img
                 className="restaurant-list-image"
                 src={this.props.restaurant.image_url}
