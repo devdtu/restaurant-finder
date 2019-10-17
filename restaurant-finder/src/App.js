@@ -2,6 +2,7 @@ import React, { Component, useCallback } from "react";
 import ListContainer from "./ListContainer";
 import MapContainer from "./MapContainer";
 import SwitchButton from "./switch-button";
+import SearchBoxComponent from "./googleSearchBoxNew";
 
 class App extends Component {
   state = {
@@ -89,14 +90,12 @@ class App extends Component {
 
   searchTextChanged(place) {
     let address = place.formatted_address;
-    console.log(address);
     this.getRestaurants(address);
-    console.log(place);
   }
 
   switchChanged() {
     this.setState({ switchMap: !this.state.switchMap }, () => {
-      console.log(this.state);
+      // console.log(this.state);
     });
   }
 
@@ -106,9 +105,19 @@ class App extends Component {
         <div className="row">
           <div className="col-md-12">
             {this.state.screenWidth < 768 ? (
-              <div className="row d-flex align-items-center font-weight-bold text-white switch-container">
+              <div className="row d-flex align-items-center pt-2 font-weight-bold text-white switch-container">
                 <div className="col-md-12">
-                  <div className="row d-flex justify-content-center">
+                  <div className="d-flex justify-content-center">
+                    <SearchBoxComponent
+                      searchTextChange={this.searchTextChanged.bind(
+                        this.selfReference
+                      )}
+                      googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDAQOhuvUriLPgDzVblnSSH7BUj-s2EMSw&v=3.exp&libraries=geometry,drawing,places`}
+                      loadingElement={<div style={{ height: `100%` }} />}
+                      containerElement={<div style={{ height: `400px` }} />}
+                    ></SearchBoxComponent>
+                  </div>
+                  <div className="row pt-2 d-flex justify-content-center">
                     <div className="col-auto">Show on map</div>
                     <div className="col-auto">
                       <SwitchButton

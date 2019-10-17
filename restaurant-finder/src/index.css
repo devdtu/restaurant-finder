@@ -10254,7 +10254,7 @@ react-toggle css ends
   }
 
   .switch-container {
-    height: 50px;
+    height: 90px;
     background-color: #04b4b4;
     position: fixed;
     width: 100%;
@@ -10263,10 +10263,10 @@ react-toggle css ends
   }
 
   .list-container-restaurant {
-    height:calc( 100vh - 50px );
+    height:calc( 100vh - 90px );
    }
 
    .content-wrap {
-     padding-top: 50px;
+     padding-top: 90px;
    }
 }
