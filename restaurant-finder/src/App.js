@@ -1,6 +1,7 @@
 import React, { Component, useCallback } from "react";
 import ListContainer from "./ListContainer";
 import MapContainer from "./MapContainer";
+import SwitchButton from "./switch-button";
 
 class App extends Component {
   state = {
@@ -16,14 +17,14 @@ class App extends Component {
   }
 
   restaurantSelected = restaurant => {
-    this.setState(
-      {
-        selectedRestaurant: restaurant
-      },
-      () => {
-        // console.log(this.state);
-      }
-    );
+    const stateObject = { selectedRestaurant: restaurant };
+    if (window.innerWidth < 768) {
+      stateObject.switchMap = true;
+    }
+
+    this.setState(stateObject, () => {
+      // console.log(this.state);
+    });
   };
 
   resize() {
@@ -93,6 +94,12 @@ class App extends Component {
     console.log(place);
   }
 
+  switchChanged() {
+    this.setState({ switchMap: !this.state.switchMap }, () => {
+      console.log(this.state);
+    });
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -100,7 +107,19 @@ class App extends Component {
           <div className="col-md-12">
             {this.state.screenWidth < 768 ? (
               <div className="row d-flex align-items-center font-weight-bold text-white switch-container">
-                <div className="col-md-12">Show on map</div>
+                <div className="col-md-12">
+                  <div className="row d-flex justify-content-center">
+                    <div className="col-auto">Show on map</div>
+                    <div className="col-auto">
+                      <SwitchButton
+                        props={this.state.switchMap}
+                        switchChanged={this.switchChanged.bind(
+                          this.selfReference
+                        )}
+                      ></SwitchButton>
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : (
               ""
