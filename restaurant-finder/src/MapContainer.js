@@ -10,19 +10,17 @@ class MapContainer extends Component {
   constructor(props) {
     super(props);
     this.selfReference = this;
+    this.setState({});
   }
 
   onSearchTextChange(place) {
-    console.log(this);
     this.props.onSearchTextChanged(place);
-    console.log("hererjeh");
-    console.log(place);
   }
 
   render() {
     return this.props.restaurants ? (
       <div className="container-fluid">
-        <div className="test">
+        <div className="search-box-container">
           <SearchBoxComponent
             searchTextChange={this.onSearchTextChange.bind(this.selfReference)}
             googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDAQOhuvUriLPgDzVblnSSH7BUj-s2EMSw&v=3.exp&libraries=geometry,drawing,places`}
