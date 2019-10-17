@@ -10269,4 +10269,9 @@ react-toggle css ends
    .content-wrap {
      padding-top: 90px;
    }
+
+   .back-image {
+    max-height: 35px;
+    padding-left: 0.5rem;
+   }
 }
