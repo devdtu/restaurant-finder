@@ -15,14 +15,7 @@ const GoogleMapComponent = withScriptjs(
       props.handlemarkerClick(marker);
     };
 
-    let searchBox;
-
-    function componentWillMount() {
-      console.log("componentWillMount() called");
-    }
-
     const onPlacesChange = () => {
-      console.log("onPlacesChange called");
       const places = this.searchBox.getPlaces();
       this.setState({ places });
     };

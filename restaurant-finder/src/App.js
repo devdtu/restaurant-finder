@@ -7,7 +7,9 @@ import SearchBoxComponent from "./googleSearchBoxNew";
 class App extends Component {
   state = {
     selectedRestaurant: null,
-    restaurants: null
+    restaurants: null,
+    offset: 20,
+    location: "Peachtree Corners, GA"
   };
 
   selfReference;
@@ -34,9 +36,8 @@ class App extends Component {
       stateObject.switchMap = true;
     }
 
-    console.log(stateObject);
     this.setState(stateObject, () => {
-      console.log(this.state);
+      // console.log(this.state);
     });
   }
 
@@ -52,7 +53,7 @@ class App extends Component {
     });
     xhr.open(
       "GET",
-      "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=restaurants&location=Peachtree Corners, GA, US&offset=19"
+      "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=restaurants&location=Peachtree Corners, GA, US"
     );
     xhr.setRequestHeader(
       "Authorization",
@@ -67,9 +68,14 @@ class App extends Component {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("load", () => {
       this.setState(
-        { restaurants: JSON.parse(xhr.responseText), selectedRestaurant: null },
+        {
+          restaurants: JSON.parse(xhr.responseText),
+          selectedRestaurant: null,
+          location: address,
+          offset: 20
+        },
         () => {
-          console.log(this.state);
+          // console.log(this.state);
         }
       );
     });
@@ -97,6 +103,38 @@ class App extends Component {
     this.setState({ switchMap: !this.state.switchMap }, () => {
       // console.log(this.state);
     });
+  }
+
+  loadMore() {
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", () => {
+      let restaurants = JSON.parse(xhr.responseText);
+      if (this.state.restaurants && restaurants.businesses) {
+        const restaurantsState = this.state.restaurants;
+        restaurants.businesses.forEach(restaurant => {
+          restaurantsState.businesses.push(restaurant);
+        });
+        this.setState(
+          {
+            restaurants: restaurantsState,
+            selectedRestaurant: null,
+            offset: this.state.offset + 20
+          },
+          () => {
+            // console.log(this.state);
+          }
+        );
+      }
+    });
+    var url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=restaurants&location=${this.state.location}&offset=${this.state.offset}`;
+    xhr.open("GET", url);
+    xhr.setRequestHeader(
+      "Authorization",
+      "Bearer " +
+        "wfjGJjybjdhG0J0LVynQTGytYSx3wWFq86tLagik1Q4VuQNV_RsSMldrz3tdjk_0oC30nRp1ba3PsvsXg1s5c7fx3Wcz9_ZgUcczJpRBcbXd2qLv2_TUH6s64KKbXHYx"
+    );
+    xhr.setRequestHeader("Accept", "*/*");
+    xhr.send();
   }
 
   render() {
@@ -140,6 +178,7 @@ class App extends Component {
                     restaurants={this.state.restaurants}
                     selectedRestaurant={this.state.selectedRestaurant}
                     selectRestaurant={this.restaurantSelected}
+                    loadMore={this.loadMore.bind(this.selfReference)}
                     deSelectRestaurant={this.deSelectRestaurant.bind(
                       this.selfReference
                     )}
