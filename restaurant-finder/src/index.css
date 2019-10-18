@@ -10271,7 +10271,7 @@ react-toggle css ends
    }
 
    .back-image {
-    max-height: 35px;
-    padding-left: 0.5rem;
+      max-height: 35px;
+      padding-left: 0.5rem;
    }
 }
