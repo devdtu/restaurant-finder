@@ -5,6 +5,12 @@ import SwitchButton from "./switch-button";
 import SearchBoxComponent from "./googleSearchBoxNew";
 
 class App extends Component {
+  finalRestaurantMarkerList = [];
+  indexesUsed = {};
+  clusters = {};
+  clusterCount = 0;
+  markersNew;
+
   state = {
     selectedRestaurant: null,
     restaurants: null,
@@ -29,6 +35,89 @@ class App extends Component {
       // console.log(this.state);
     });
   };
+
+  // Converts numeric degrees to radians
+  toRad(Value) {
+    return (Value * Math.PI) / 180;
+  }
+
+  calcCrow(lat1, lon1, lat2, lon2) {
+    var R = 6371; // km
+    var dLat = this.toRad(lat2 - lat1);
+    var dLon = this.toRad(lon2 - lon1);
+    var lat1 = this.toRad(lat1);
+    var lat2 = this.toRad(lat2);
+
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d;
+  }
+
+  calculateDistance(restaurant1, restaurant2) {
+    // coordinates
+    var distance = this.calcCrow(
+      restaurant1.coordinates.latitude,
+      restaurant1.coordinates.longitude,
+      restaurant2.coordinates.latitude,
+      restaurant2.coordinates.longitude
+    );
+    return distance;
+  }
+
+  developCluster() {
+    if (this.state.restaurants.businesses) {
+      this.state.restaurants.businesses.forEach((element, index) => {
+        let clusterNodes = [];
+        for (
+          let i = index + 1;
+          i < this.state.restaurants.businesses.length;
+          i++
+        ) {
+          if (!this.indexesUsed[i]) {
+            let distance = this.calculateDistance(
+              element,
+              this.state.restaurants.businesses[i]
+            );
+
+            if (distance < 3) {
+              clusterNodes.push(this.state.restaurants.businesses[i]);
+              this.indexesUsed[i] = 1;
+            }
+          }
+        }
+
+        if (clusterNodes.length) {
+          this.clusters[this.clusterCount] = [...clusterNodes, element];
+          this.clusterCount = this.clusterCount + 1;
+        } else {
+          if (!this.indexesUsed[index]) {
+            this.clusters[this.clusterCount] = [element];
+            this.clusterCount = this.clusterCount + 1;
+          }
+        }
+      });
+
+      console.log(this.clusters);
+    }
+
+    for (let key in this.clusters) {
+      if (this.clusters.hasOwnProperty(key)) {
+        console.log(key);
+        let restaurant = this.clusters[key][0];
+        restaurant.label = this.clusters[key].length;
+        this.finalRestaurantMarkerList.push(restaurant);
+      }
+    }
+
+    this.setState({
+      cluster: JSON.parse(JSON.stringify(this.clusters)),
+      finalRestaurantMarkerList: [...this.finalRestaurantMarkerList]
+    });
+    console.log(this.finalRestaurantMarkerList);
+  }
 
   centerChanged = coord => {
     // console.log(coord);
@@ -58,6 +147,7 @@ class App extends Component {
           // offset: 20
         },
         () => {
+          this.developCluster();
           console.log(this.state.restaurants);
           // console.log(this.state);
         }
@@ -93,6 +183,7 @@ class App extends Component {
     xhr.addEventListener("load", () => {
       this.setState({ restaurants: JSON.parse(xhr.responseText) }, () => {
         // console.log(this.state);
+        this.developCluster();
       });
     });
     xhr.open(
@@ -121,6 +212,7 @@ class App extends Component {
         },
         () => {
           // console.log(this.state);
+          this.developCluster();
         }
       );
     });
@@ -166,6 +258,7 @@ class App extends Component {
             offset: this.state.offset + 20
           },
           () => {
+            this.developCluster();
             // console.log(this.state);
           }
         );
@@ -240,6 +333,9 @@ class App extends Component {
                     onSearchTextChanged={this.searchTextChanged.bind(
                       this.selfReference
                     )}
+                    finalRestaurantMarkerList={
+                      this.state.finalRestaurantMarkerList
+                    }
                     selectedRestaurant={this.state.selectedRestaurant}
                     restaurants={this.state.restaurants}
                     handlemarkerClick={this.restaurantSelected}
