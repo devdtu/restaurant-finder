@@ -36,6 +36,10 @@ class App extends Component {
     });
   };
 
+  handleClusterClick = marker => {
+    this.showAllNodesOfCluster(marker.restaurant);
+  };
+
   // Converts numeric degrees to radians
   toRad(Value) {
     return (Value * Math.PI) / 180;
@@ -65,6 +69,47 @@ class App extends Component {
       restaurant2.coordinates.longitude
     );
     return distance;
+  }
+
+  showAllNodesOfCluster(restaurant) {
+    var index = -1;
+    for (let key in this.state.cluster) {
+      if (this.state.cluster.hasOwnProperty(key)) {
+        if (this.state.cluster[key][0].id === restaurant.id) {
+          index = key;
+        }
+      }
+    }
+
+    console.log("line 84");
+    if (index !== -1) {
+      //add all the restaurant at that cluster index to finalRestaurantMarkerList
+      // IMP - remove set label to 1 for all of it
+
+      let restaurantsToAdd = this.state.cluster[index];
+
+      restaurantsToAdd = restaurantsToAdd.map(item => {
+        item.label = 1;
+        return item;
+      });
+
+      console.log(index);
+      console.log(restaurantsToAdd);
+
+      let newRestaurantList = this.state.finalRestaurantMarkerList.filter(
+        item => item.id !== restaurant.id
+      );
+
+      let finalRestaurantMarkerList = [
+        ...newRestaurantList,
+        ...restaurantsToAdd
+      ];
+
+      this.setState({
+        finalRestaurantMarkerList: [...finalRestaurantMarkerList]
+      });
+      console.log(JSON.stringify(finalRestaurantMarkerList));
+    }
   }
 
   developCluster() {
@@ -336,6 +381,9 @@ class App extends Component {
                     finalRestaurantMarkerList={
                       this.state.finalRestaurantMarkerList
                     }
+                    handleClusterClick={this.handleClusterClick.bind(
+                      this.selfReference
+                    )}
                     selectedRestaurant={this.state.selectedRestaurant}
                     restaurants={this.state.restaurants}
                     handlemarkerClick={this.restaurantSelected}

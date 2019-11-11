@@ -5,7 +5,7 @@ import RestaurantMarker from "./RestaurantMarker.js";
 const GoogleMapComponent = withScriptjs(
   withGoogleMap(props => {
     var _map;
-    var _zoom = 14;
+    var _zoom = 12;
     var finalRestaurantMarkerList = [];
     var indexesUsed = {};
     var clusters = {};
@@ -22,14 +22,26 @@ const GoogleMapComponent = withScriptjs(
           lng: parseFloat(marker.restaurant.coordinates.longitude)
         };
 
-        _map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.setCenter(
-          newCenter
-        );
+        let mapReference = _map;
 
-        _map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.setZoom(16);
+        setTimeout(() => {
+          mapReference.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.setCenter(
+            newCenter
+          );
+
+          mapReference.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.setZoom(
+            15
+          );
+        }, 1000);
+        // _map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.setCenter(
+        //   newCenter
+        // );
+
+        // _map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.setZoom(16);
 
         // showAllNodesOfCluster(marker.restaurant);
-
+        console.log("cluster clicked");
+        props.handleClusterClick(marker);
         // props.selectedRestaurant = {};
         // props.selectedRestaurant = null;
         // marker.setMap(_map);
@@ -144,19 +156,34 @@ const GoogleMapComponent = withScriptjs(
       });
     };
 
+    function showMarkers() {
+      let center = _map.getCenter();
+      let lat = center.lat(),
+        lng = center.lng();
+      console.log(lat, lng);
+      // console.log(markers);
+    }
+
     return (
-      <GoogleMap
-        ref={map => {
-          console.log(_map);
-          console.log(map);
-          _map = map;
-        }}
-        defaultZoom={_zoom}
-        center={{ lat: centerCoordinates.lat, lng: centerCoordinates.lng }}
-        onDragEnd={test}
-      >
-        {markers}
-      </GoogleMap>
+      <div>
+        <div>
+          <button onClick={showMarkers} className="btn btn-success">
+            test
+          </button>
+        </div>
+        <GoogleMap
+          ref={map => {
+            console.log(_map);
+            console.log(map);
+            _map = map;
+          }}
+          defaultZoom={_zoom}
+          center={{ lat: centerCoordinates.lat, lng: centerCoordinates.lng }}
+          onDragEnd={test}
+        >
+          {markers}
+        </GoogleMap>
+      </div>
     );
   })
 );

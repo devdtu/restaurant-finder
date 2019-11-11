@@ -7,6 +7,11 @@ class MapContainer extends Component {
     this.props.handlemarkerClick(marker.restaurant);
   };
 
+  handleClusterClick = marker => {
+    console.log("cluster clicked");
+    this.props.handleClusterClick(marker);
+  };
+
   // setMarkers = markers => {
   //   this.setState(
   //     {
@@ -62,6 +67,7 @@ class MapContainer extends Component {
               centerChanged={this.centerChanged}
               restaurants={this.props.restaurants}
               finalRestaurantMarkerList={this.props.finalRestaurantMarkerList}
+              handleClusterClick={this.handleClusterClick}
               googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDAQOhuvUriLPgDzVblnSSH7BUj-s2EMSw&v=3.exp&libraries=geometry,drawing,places`}
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={
