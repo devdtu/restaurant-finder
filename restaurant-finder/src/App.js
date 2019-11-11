@@ -30,6 +30,50 @@ class App extends Component {
     });
   };
 
+  centerChanged = coord => {
+    // console.log(coord);
+    this.GetNewRestaurantsReCenter(coord);
+  };
+
+  GetNewRestaurantsReCenter(coord) {
+    // fetch rest using coord
+    var xhr = new XMLHttpRequest();
+    console.log(coord);
+    xhr.addEventListener("load", () => {
+      // console.log(this.state.restaurants);
+      // console.log(JSON.parse(xhr.responseText));
+
+      let newRestaurantsList = JSON.parse(xhr.responseText);
+
+      newRestaurantsList.businesses = [
+        ...newRestaurantsList.businesses,
+        ...this.state.restaurants.businesses
+      ];
+
+      this.setState(
+        {
+          restaurants: newRestaurantsList
+          // selectedRestaurant: null
+          // location: address,
+          // offset: 20
+        },
+        () => {
+          console.log(this.state.restaurants);
+          // console.log(this.state);
+        }
+      );
+    });
+    var url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=${coord.lat}&longitude=${coord.lng}`;
+    xhr.open("GET", url);
+    xhr.setRequestHeader(
+      "Authorization",
+      "Bearer " +
+        "wfjGJjybjdhG0J0LVynQTGytYSx3wWFq86tLagik1Q4VuQNV_RsSMldrz3tdjk_0oC30nRp1ba3PsvsXg1s5c7fx3Wcz9_ZgUcczJpRBcbXd2qLv2_TUH6s64KKbXHYx"
+    );
+    xhr.setRequestHeader("Accept", "*/*");
+    xhr.send();
+  }
+
   resize() {
     const stateObject = { screenWidth: window.innerWidth };
     if (window.innerWidth < 768) {
@@ -66,6 +110,7 @@ class App extends Component {
 
   getRestaurants(address) {
     var xhr = new XMLHttpRequest();
+    console.log(address);
     xhr.addEventListener("load", () => {
       this.setState(
         {
@@ -198,6 +243,7 @@ class App extends Component {
                     selectedRestaurant={this.state.selectedRestaurant}
                     restaurants={this.state.restaurants}
                     handlemarkerClick={this.restaurantSelected}
+                    centerChanged={this.centerChanged}
                   ></MapContainer>
                 </div>
               ) : (

@@ -11,8 +11,6 @@ class App extends Component {
 
   onPlacesChange = () => {
     const places = this.searchBox.getPlaces();
-    console.log(places);
-
     this.props.searchTextChange(places[0]);
   };
 

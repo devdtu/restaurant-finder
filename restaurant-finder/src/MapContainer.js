@@ -3,8 +3,19 @@ import GoogleMapComponent from "./GoogleMapComponent";
 import SearchBoxComponent from "./googleSearchBoxNew";
 
 class MapContainer extends Component {
+  markerReload = false;
   markerClicked = marker => {
     this.props.handlemarkerClick(marker.restaurant);
+  };
+
+  setMarkerReload = bool => {
+    this.markerReload = bool;
+    console.log(this.markerReload);
+  };
+
+  centerChanged = coord => {
+    this.props.centerChanged(coord);
+    // console.log(coord);
   };
   selfReference;
   constructor(props) {
@@ -15,6 +26,10 @@ class MapContainer extends Component {
 
   onSearchTextChange(place) {
     this.props.onSearchTextChanged(place);
+  }
+
+  onCenterChange(center) {
+    console.log(center);
   }
 
   render() {
@@ -39,7 +54,10 @@ class MapContainer extends Component {
             <GoogleMapComponent
               selectedRestaurant={this.props.selectedRestaurant}
               handlemarkerClick={this.markerClicked}
+              centerChanged={this.centerChanged}
               restaurants={this.props.restaurants}
+              markerReload={this.markerReload}
+              setMarkerReload={this.setMarkerReload}
               googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyDAQOhuvUriLPgDzVblnSSH7BUj-s2EMSw&v=3.exp&libraries=geometry,drawing,places`}
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={
