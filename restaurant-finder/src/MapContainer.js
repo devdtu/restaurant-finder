@@ -8,7 +8,6 @@ class MapContainer extends Component {
   };
 
   handleClusterClick = marker => {
-    console.log("cluster clicked");
     this.props.handleClusterClick(marker);
   };
 
@@ -39,7 +38,7 @@ class MapContainer extends Component {
   }
 
   onCenterChange(center) {
-    console.log(center);
+    // console.log(center);
   }
 
   render() {

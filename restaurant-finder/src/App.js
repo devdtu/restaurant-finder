@@ -4,12 +4,15 @@ import MapContainer from "./MapContainer";
 import SwitchButton from "./switch-button";
 import SearchBoxComponent from "./googleSearchBoxNew";
 
+import * as _ from "lodash";
+
 class App extends Component {
   finalRestaurantMarkerList = [];
   indexesUsed = {};
   clusters = {};
   clusterCount = 0;
   markersNew;
+  loadMoreCheck = false;
 
   state = {
     selectedRestaurant: null,
@@ -81,7 +84,6 @@ class App extends Component {
       }
     }
 
-    console.log("line 84");
     if (index !== -1) {
       //add all the restaurant at that cluster index to finalRestaurantMarkerList
       // IMP - remove set label to 1 for all of it
@@ -93,27 +95,42 @@ class App extends Component {
         return item;
       });
 
-      console.log(index);
-      console.log(restaurantsToAdd);
-
       let newRestaurantList = this.state.finalRestaurantMarkerList.filter(
         item => item.id !== restaurant.id
       );
 
+      let newRestaurantsToAddList = [];
+
+      restaurantsToAdd.forEach(item => {
+        let check = true;
+        newRestaurantList.forEach(item2 => {
+          if (item.id === item2.id) {
+            check = false;
+          }
+        });
+        if (check) {
+          newRestaurantsToAddList.push(item);
+        }
+      });
+
       let finalRestaurantMarkerList = [
         ...newRestaurantList,
-        ...restaurantsToAdd
+        ...newRestaurantsToAddList
       ];
 
       this.setState({
-        finalRestaurantMarkerList: [...finalRestaurantMarkerList]
+        finalRestaurantMarkerList: [
+          ..._.uniqBy(finalRestaurantMarkerList, "id")
+        ]
       });
-      console.log(JSON.stringify(finalRestaurantMarkerList));
     }
   }
 
   developCluster() {
     if (this.state.restaurants.businesses) {
+      this.indexesUsed = {};
+      this.clusters = {};
+      this.clusterCount = 0;
       this.state.restaurants.businesses.forEach((element, index) => {
         let clusterNodes = [];
         for (
@@ -145,23 +162,23 @@ class App extends Component {
         }
       });
 
-      console.log(this.clusters);
-    }
+      let finalRestaurantMarkerList = [];
 
-    for (let key in this.clusters) {
-      if (this.clusters.hasOwnProperty(key)) {
-        console.log(key);
-        let restaurant = this.clusters[key][0];
-        restaurant.label = this.clusters[key].length;
-        this.finalRestaurantMarkerList.push(restaurant);
+      for (let key in this.clusters) {
+        if (this.clusters.hasOwnProperty(key)) {
+          let restaurant = this.clusters[key][0];
+          restaurant.label = this.clusters[key].length;
+          finalRestaurantMarkerList.push(restaurant);
+        }
       }
-    }
 
-    this.setState({
-      cluster: JSON.parse(JSON.stringify(this.clusters)),
-      finalRestaurantMarkerList: [...this.finalRestaurantMarkerList]
-    });
-    console.log(this.finalRestaurantMarkerList);
+      this.setState({
+        cluster: JSON.parse(JSON.stringify(this.clusters)),
+        finalRestaurantMarkerList: [
+          ..._.uniqBy(finalRestaurantMarkerList, "id")
+        ]
+      });
+    }
   }
 
   centerChanged = coord => {
@@ -169,14 +186,32 @@ class App extends Component {
     this.GetNewRestaurantsReCenter(coord);
   };
 
+  filterRestaurants = restaurants => {
+    const restaurantsList = this.state.restaurants
+      ? this.state.restaurants.businesses
+      : [];
+
+    let newRestaurantsList = [];
+    restaurants.forEach(item => {
+      let check = 0;
+      restaurantsList.forEach(item2 => {
+        if (item.id === item2.id) {
+          check = 1;
+        }
+      });
+
+      if (check === 0) {
+        return newRestaurantsList.push(item);
+      }
+    });
+
+    return newRestaurantsList;
+  };
+
   GetNewRestaurantsReCenter(coord) {
     // fetch rest using coord
     var xhr = new XMLHttpRequest();
-    console.log(coord);
     xhr.addEventListener("load", () => {
-      // console.log(this.state.restaurants);
-      // console.log(JSON.parse(xhr.responseText));
-
       let newRestaurantsList = JSON.parse(xhr.responseText);
 
       newRestaurantsList.businesses = [
@@ -184,17 +219,16 @@ class App extends Component {
         ...this.state.restaurants.businesses
       ];
 
+      newRestaurantsList.businesses = this.filterRestaurants(
+        newRestaurantsList.businesses
+      );
+
       this.setState(
         {
           restaurants: newRestaurantsList
-          // selectedRestaurant: null
-          // location: address,
-          // offset: 20
         },
         () => {
           this.developCluster();
-          console.log(this.state.restaurants);
-          // console.log(this.state);
         }
       );
     });
@@ -226,8 +260,15 @@ class App extends Component {
 
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("load", () => {
-      this.setState({ restaurants: JSON.parse(xhr.responseText) }, () => {
-        // console.log(this.state);
+      //check here
+
+      let newRestaurantsList = JSON.parse(xhr.responseText);
+
+      newRestaurantsList.businesses = this.filterRestaurants(
+        newRestaurantsList.businesses
+      );
+
+      this.setState({ restaurants: newRestaurantsList }, () => {
         this.developCluster();
       });
     });
@@ -246,11 +287,18 @@ class App extends Component {
 
   getRestaurants(address) {
     var xhr = new XMLHttpRequest();
-    console.log(address);
     xhr.addEventListener("load", () => {
+      //check here
+
+      let newRestaurantsList = JSON.parse(xhr.responseText);
+
+      newRestaurantsList.businesses = this.filterRestaurants(
+        newRestaurantsList.businesses
+      );
+
       this.setState(
         {
-          restaurants: JSON.parse(xhr.responseText),
+          restaurants: newRestaurantsList,
           selectedRestaurant: null,
           location: address,
           offset: 20
@@ -288,6 +336,9 @@ class App extends Component {
   }
 
   loadMore() {
+    if (this.loadMoreCheck) {
+      return;
+    }
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("load", () => {
       let restaurants = JSON.parse(xhr.responseText);
@@ -296,15 +347,43 @@ class App extends Component {
         restaurants.businesses.forEach(restaurant => {
           restaurantsState.businesses.push(restaurant);
         });
+
+        let newRestaurantsList = restaurantsState;
+
+        // newRestaurantsList.businesses = this.filterRestaurants(
+        //   newRestaurantsList.businesses
+        // );
+
+        let filteredRestaurantList = [];
+
+        newRestaurantsList.businesses.forEach(item => {
+          let check = true;
+          this.state.restaurants.businesses.forEach(item2 => {
+            if (item.id === item2.id) {
+              check = false;
+            }
+          });
+
+          if (check) {
+            filteredRestaurantList.push(item);
+          }
+        });
+
+        newRestaurantsList.businesses = [
+          ...this.state.restaurants.businesses,
+          ...filteredRestaurantList
+        ];
+
+        this.loadMoreCheck = true;
         this.setState(
           {
-            restaurants: restaurantsState,
+            restaurants: newRestaurantsList,
             selectedRestaurant: null,
             offset: this.state.offset + 20
           },
           () => {
+            this.loadMoreCheck = false;
             this.developCluster();
-            // console.log(this.state);
           }
         );
       }

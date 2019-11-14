@@ -9,7 +9,7 @@ class SwitchButton extends Component {
   }
 
   handleChange(checked) {
-    console.log("here");
+    // console.log("here");
     // this.setState({ checked });
     this.props.switchChanged();
   }
